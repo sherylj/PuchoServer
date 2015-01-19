@@ -21,8 +21,7 @@ public class Country extends Model {
 
     public Country() {}
 
-    public Country(Long id, String name) {
-        this.id = id;
+    public Country(String name) {
         this.name = name;
     }
 
@@ -32,5 +31,9 @@ public class Country extends Model {
 
     public static Finder<Long,Country> find = new Finder<Long,Country>(
             Long.class, Country.class);
+
+    public static Country findByName(String name) {
+        return find.where().eq("name",name).findUnique();
+    }
 
 }

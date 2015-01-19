@@ -22,8 +22,7 @@ public class Area extends Model {
 
     public Area() {}
 
-    public Area(Long id, String name) {
-        this.id = id;
+    public Area(String name) {
         this.name = name;
     }
 
@@ -34,6 +33,9 @@ public class Area extends Model {
     public static Finder<Long,Area> find = new Finder<Long,Area>(
             Long.class, Area.class);
 
+    public static Area findByName(String name) {
+        return find.where().eq("name", name).findUnique();
+    }
 
 
 }
