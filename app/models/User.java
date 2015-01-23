@@ -7,7 +7,11 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import java.io.UnsupportedEncodingException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.List;
+import java.util.UUID;
 
 @Entity
 public class User extends Model {
@@ -18,14 +22,21 @@ public class User extends Model {
     public String lastname;
     public String profession;
 
+    private String authToken;
+
     @Constraints.Required
     private String username;
 
     @Constraints.Required
+    @Constraints.Email
     private String email;
 
     @Constraints.Required
+    @Constraints.MinLength(6)
+    @Constraints.MaxLength(256)
     private String password;
+
+    private byte[] shaPassword;
 
     public String linkedin;
     public String personal_url;
@@ -43,11 +54,12 @@ public class User extends Model {
     }
 
     public void setEmail(String email) {
-        this.email = email;
+        this.email = email.toLowerCase();
     }
 
     public void setPassword(String password) {
         this.password = password;
+        shaPassword = getSha512(password);
     }
 
 
@@ -65,8 +77,8 @@ public class User extends Model {
 
     public User(String username, String email, String password) {
         this.username = username;
-        this.email = email;
-        this.password = password;
+        setEmail(email);
+        setPassword(password);
     }
 
     public static User findById(String id) {
@@ -81,6 +93,54 @@ public class User extends Model {
         return find.where().eq("email", email).findUnique();
     }
 
+    public String createToken() {
+        authToken = UUID.randomUUID().toString();
+        save();
+        return authToken;
+    }
+
+    public void deleteToken() {
+        authToken = null;
+        save();
+    }
 
 
+    public static byte[] getSha512(String value) {
+        try {
+            return MessageDigest.getInstance("SHA-512").digest(value.getBytes("UTF-8"));
+        }
+        catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException(e);
+        }
+        catch (UnsupportedEncodingException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+
+    public static User findByAuthToken(String authToken) {
+        if (authToken == null) {
+            return null;
+            }
+
+        try  {
+               return find.where().eq("authToken", authToken).findUnique();
+        }
+        catch (Exception e) {
+                return null;
+        }
+    }
+
+
+    public static User findByEmailAddressAndPassword(String email, String password) {
+
+           return find.where().eq("email", email.toLowerCase())
+                   .eq("shaPassword", getSha512(password)).findUnique();
+           /*return find.where().conjunction()
+                   .add(Expr.eq("email", email.toLowerCase()))
+                   .add(Expr.eq("shaPassword", getSha512(password)))
+                   .findUnique();   */
+
+
+    }
 }
