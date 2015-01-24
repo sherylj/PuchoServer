@@ -15,6 +15,7 @@ public class ActionAuthenticator extends Security.Authenticator {
         if (token != null) {
             User user = User.findByAuthToken(token);
             if (user != null) {
+                ctx.args.put("user",user);
                 return user.getUsername();
             }
         }

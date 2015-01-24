@@ -12,8 +12,9 @@ import play.mvc.Security;
 /**
  * Created by sherylj on 1/23/15.
  */
-public class LoginController extends Controller{
+public class LoginController extends Controller {
     public static final String AUTH_TOKEN = "authToken";
+    public final static String AUTH_TOKEN_HEADER = "X-AUTH-TOKEN";
 
 
     public static User getUser() {
@@ -22,7 +23,6 @@ public class LoginController extends Controller{
 
 
     public static Result login() {
-        Http.RequestBody body = request().body();
         JsonNode jsonNode = request().body().asJson();
         if (jsonNode.isNull()) {
             return badRequest("Request Body missing");
