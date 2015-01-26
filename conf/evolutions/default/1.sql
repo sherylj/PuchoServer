@@ -21,6 +21,12 @@ create table language (
   constraint pk_language primary key (id))
 ;
 
+create table profession (
+  id                        bigint not null,
+  name                      varchar(255),
+  constraint pk_profession primary key (id))
+;
+
 create table user (
   id                        bigint not null,
   firstname                 varchar(255),
@@ -33,7 +39,6 @@ create table user (
   sha_password              varbinary(255),
   linkedin                  varchar(255),
   personal_url              varchar(255),
-  country_id                bigint,
   constraint pk_user primary key (id))
 ;
 
@@ -54,16 +59,16 @@ create sequence country_seq;
 
 create sequence language_seq;
 
+create sequence profession_seq;
+
 create sequence user_seq;
 
 create sequence user_education_seq;
 
-alter table user add constraint fk_user_country_1 foreign key (country_id) references country (id) on delete restrict on update restrict;
-create index ix_user_country_1 on user (country_id);
-alter table user_education add constraint fk_user_education_user_2 foreign key (user_id) references user (id) on delete restrict on update restrict;
-create index ix_user_education_user_2 on user_education (user_id);
-alter table user_education add constraint fk_user_education_area_3 foreign key (area_id) references area (id) on delete restrict on update restrict;
-create index ix_user_education_area_3 on user_education (area_id);
+alter table user_education add constraint fk_user_education_user_1 foreign key (user_id) references user (id) on delete restrict on update restrict;
+create index ix_user_education_user_1 on user_education (user_id);
+alter table user_education add constraint fk_user_education_area_2 foreign key (area_id) references area (id) on delete restrict on update restrict;
+create index ix_user_education_area_2 on user_education (area_id);
 
 
 
@@ -77,6 +82,8 @@ drop table if exists country;
 
 drop table if exists language;
 
+drop table if exists profession;
+
 drop table if exists user;
 
 drop table if exists user_education;
@@ -88,6 +95,8 @@ drop sequence if exists area_seq;
 drop sequence if exists country_seq;
 
 drop sequence if exists language_seq;
+
+drop sequence if exists profession_seq;
 
 drop sequence if exists user_seq;
 

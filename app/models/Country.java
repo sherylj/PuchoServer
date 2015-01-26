@@ -5,7 +5,6 @@ import play.db.ebean.Model;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.OneToOne;
 
 
 @Entity
@@ -16,13 +15,13 @@ public class Country extends Model {
     @Constraints.Required
     public String name;
 
-    @OneToOne(mappedBy = "country")
-    public User user;
+    //@OneToOne(mappedBy = "country")
+    //public User user;
 
     public Country() {}
 
     public Country(String name) {
-        this.name = name;
+        this.name = name.toLowerCase();
     }
 
     public String toString() {
@@ -33,7 +32,7 @@ public class Country extends Model {
             Long.class, Country.class);
 
     public static Country findByName(String name) {
-        return find.where().eq("name",name).findUnique();
+        return find.where().eq("name",name.toLowerCase()).findUnique();
     }
 
 }

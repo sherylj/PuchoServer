@@ -6,7 +6,6 @@ import play.db.ebean.Model;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -41,7 +40,6 @@ public class User extends Model {
     public String linkedin;
     public String personal_url;
 
-    @OneToOne
     public Country country;
 
     @OneToMany(mappedBy = "user")

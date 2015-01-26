@@ -29,7 +29,7 @@ public class Areas extends Controller {
         //Check if area exists in the table else add it
         Area area = Area.findByName(name);
         if (area != null) {
-            return found("Country already exists!");
+            return found("Area already exists!");
         }
         area = new Area(name);
         area.save();
@@ -43,6 +43,6 @@ public class Areas extends Controller {
         }
 
         area.delete();
-        return redirect(routes.Users.list());
+        return redirect(routes.Areas.list());
     }
 }

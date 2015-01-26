@@ -1,7 +1,7 @@
 package controllers;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import models.Country;
+import models.Language;
 import play.db.ebean.Model;
 import play.libs.Json;
 import play.mvc.Controller;
@@ -11,12 +11,12 @@ import play.mvc.Result;
 import java.util.List;
 
 /**
- * Created by sherylj on 1/18/15.
+ * Created by sherylj on 1/24/15.
  */
-public class Countries extends Controller {
+public class Languages extends Controller {
 
     public static Result list() {
-        List<Country> countries = new Model.Finder<Long , Country>(Long.class, Country.class).all();
+        List<Language> countries = new Model.Finder<Long , Language>(Long.class, Language.class).all();
         return ok(Json.toJson(countries));
     }
 
@@ -27,23 +27,23 @@ public class Countries extends Controller {
             return badRequest("Request Body missing");
         }
         String name = jsonNode.findPath("name").asText();
-        //Check if country name exists in the table else add it
-        Country country = Country.findByName(name);
-        if (country != null) {
-            return found("Country already exists!");
+        //Check if name exists in the table else add it
+        Language language = Language.findByName(name);
+        if (language != null) {
+            return found("Language already exists!");
         }
-        country = new Country(name);
-        country.save();
+        language = new Language(name);
+        language.save();
         return created();
     }
 
     public static Result delete(String name) {
-        Country country = Country.findByName(name);
-        if (country == null) {
-            return notFound(String.format("Country %s does not exist.", name));
+        Language language = Language.findByName(name);
+        if (language == null) {
+            return notFound(String.format("Language %s does not exist.", name));
         }
 
-        country.delete();
-        return redirect(routes.Countries.list());
+        language.delete();
+        return redirect(routes.Languages.list());
     }
 }

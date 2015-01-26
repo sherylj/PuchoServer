@@ -17,6 +17,7 @@ POST    /logout                     controllers.LoginController.logout()
 GET    /users                controllers.Users.list()
 #Post json body
 POST   /users/               controllers.Users.save()
+GET    /users/:email         controllers.Users.findByEmail(email: String)
 GET    /users/:id            controllers.Users.findById(id: String)
 DELETE /users/:id            controllers.Users.delete(id: String)
 
@@ -30,3 +31,13 @@ DELETE /countries/:name      controllers.Countries.delete(name: String)
 GET /areas                   controllers.Areas.list()
 POST /areas/                 controllers.Areas.save()
 DELETE /areas/:name          controllers.Areas.delete(name: String)
+
+#Languages
+GET /languages               controllers.Languages.list()
+POST /languages/             controllers.Languages.save()
+DELETE /languages/:name      controllers.Languages.delete(name: String)
+
+#Professions
+GET /professions             controllers.Professions.list()
+POST /professions/           controllers.Professions.save()
+DELETE /professions/:name    controllers.Professions.delete(name: String)

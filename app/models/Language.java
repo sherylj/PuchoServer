@@ -17,9 +17,8 @@ public class Language extends Model {
 
     public Language() {};
 
-    public Language(Long id, String name) {
-        this.id = id;
-        this.name = name;
+    public Language(String name) {
+        this.name = name.toLowerCase();
     }
 
     public String toString() {
@@ -28,4 +27,8 @@ public class Language extends Model {
 
     public static Finder<Long,Language> find = new Finder<Long,Language>(
             Long.class, Language.class);
+
+    public static Language findByName(String name) {
+        return find.where().eq("name",name.toLowerCase()).findUnique();
+    }
 }
