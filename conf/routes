@@ -46,3 +46,8 @@ DELETE /professions/:name    controllers.Professions.delete(name: String)
 GET /skills                  controllers.Skills.list()
 POST /skills/                controllers.Skills.save()
 DELETE /skills/:name         controllers.Skills.delete(name: String)
+
+
+#Questions
+GET /questions               controllers.Questions.listQuestionsBySkill(skillName: String)
+POST /questions/             controllers.Questions.save()

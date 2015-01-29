@@ -1,12 +1,14 @@
 package controllers;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import models.Question;
 import models.Skill;
+import models.User;
 import play.db.ebean.Model;
 import play.libs.Json;
-import play.mvc.Controller;
-import play.mvc.Result;
+import play.mvc.*;
 
 import java.util.List;
 
@@ -16,6 +18,7 @@ import java.util.List;
 public class Questions extends Controller {
     //TODO: When creating a new Question, add skills to list if not exists (QuestionsSkills)
 
+
     public static Result list() {
         List<Question> questions = new Model.Finder<Long , Question>(Long.class, Question.class).all();
         ObjectNode result = Json.newObject();
@@ -23,13 +26,57 @@ public class Questions extends Controller {
         return ok(result);
     }
 
-    public static Result list(String skillName) {
-        if (skillName != "") {
-            Skill skill = Skill.findByName(skillName);
-
+    @Security.Authenticated(ActionAuthenticator.class)
+    @JsonIgnore
+    public static Result listQuestionsBySkill(String skillValue) {
+        String skillName = request().getQueryString("skill");
+        if (skillName == "") {
+            return badRequest("Empty skill does not exist");
         }
+
+        List<Question> questions;
+        Skill skill = Skill.findByName(skillName);
+
+        if (skill.id == null) {
+            return badRequest("Skill does not exist");
+        }
+        else {
+            questions = Question.findBySkill(skill);
+        }
+
+        ObjectNode result = Json.newObject();
+        result.put("data", Json.toJson(questions));
+        return ok(result);
+
 
     }
 
+    @Security.Authenticated(ActionAuthenticator.class)
+    @BodyParser.Of(BodyParser.Json.class)
+    @JsonIgnore
+    public static Result save() {
+        Http.RequestBody body = request().body();
+        JsonNode jsonNode = request().body().asJson();
+        if (jsonNode.isNull()) {
+            return badRequest("Request Body missing");
+        }
+
+        String askerName = jsonNode.findPath("askerName").asText();
+        String title = jsonNode.findPath("title").asText();
+        String content = jsonNode.findPath("content").asText();
+        String skill = jsonNode.findPath("skill").asText();
+        String askerId = jsonNode.findPath("askerId").asText();
+
+        Question question = new Question(askerName, title, content,skill);
+        question.save();
+
+        //Now find user and add to question
+        User asker = User.findByEmail(askerId);
+        question.asker = asker;
+        question.update();
+        ObjectNode result = Json.newObject();
+        result.put("data", Json.toJson(question));
+        return ok(result);
+    }
 
 }

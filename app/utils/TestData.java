@@ -1,5 +1,7 @@
 package utils;
 
+import models.Question;
+import models.Skill;
 import models.User;
 import play.Logger;
 
@@ -10,6 +12,8 @@ public class TestData {
 
     public static User user1;
     public static User user2;
+    public static Skill skill;
+    public static Question question;
 
     public static void loadTestData() {
         Logger.info("Loading Demo Data");
@@ -19,6 +23,15 @@ public class TestData {
 
         user2 = new User("defg","defg@test.com","password");
         user2.save();
+
+        skill = new Skill("Advice");
+        skill.save();
+
+        question = new Question("abcd", "College Question", "How to pick a university?","Advice");
+        question.save();
+
+
+
     }
 
 

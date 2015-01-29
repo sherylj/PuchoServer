@@ -1,5 +1,6 @@
 package models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import play.data.validation.Constraints;
 import play.db.ebean.Model;
 
@@ -41,10 +42,10 @@ public class User extends Model {
 
     public Country country;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user") @JsonBackReference
     public List<UserEducation> educationList;
 
-    @OneToMany(mappedBy = "asker")
+    @OneToMany(mappedBy = "asker")@JsonBackReference
     public List<Question> questionList;
 
 

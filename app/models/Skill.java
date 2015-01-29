@@ -1,5 +1,6 @@
 package models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import play.data.validation.Constraints;
 import play.db.ebean.Model;
 
@@ -19,8 +20,8 @@ public class Skill extends Model {
     @Constraints.Required
     public String name;
 
-    @OneToMany(mappedBy = "skill")
-    public List<QuestionSkills> questions;
+    @OneToMany(mappedBy = "skill") @JsonBackReference
+    public List<Question> questions;
 
     public Skill() {}
 

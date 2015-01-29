@@ -5,7 +5,7 @@ import play.db.ebean.Model;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
+import javax.persistence.Version;
 import java.util.Date;
 import java.util.List;
 
@@ -20,8 +20,8 @@ public class Question extends Model {
     @ManyToOne
     public User asker;
 
-    @OneToMany(mappedBy = "question")
-    public List<QuestionSkills> skillList;
+    @ManyToOne
+    public Skill skill;
 
     public String asker_name;
     public String title;
@@ -29,6 +29,8 @@ public class Question extends Model {
 
     public int upvotes;
     public int downvotes;
+
+    @Version
     public Date asked_on;
     public int share_count;
     public String audio_file_url;
@@ -37,7 +39,7 @@ public class Question extends Model {
         this.asker_name = asker_name;
         this.title = title;
         this.content = content;
-        //Logic: Check if skill is present in Skills table. If yes, get id and add
+        this.skill = Skill.findByName(skill);
     }
 
     public static Finder<Long, Question> find = new Finder<Long, Question>(Long.class, Question.class);
@@ -48,6 +50,14 @@ public class Question extends Model {
 
     public static Question findById(String id) {
         return find.byId(Long.parseLong(id));
+    }
+
+    public static List<Question> findByAsker(User asker) {
+        return find.where().eq("asker.id", asker.id).findList();
+    }
+
+    public static List<Question> findBySkill(Skill skill) {
+        return find.where().eq("skill.id", skill.id).findList();
     }
 
 
