@@ -4,31 +4,37 @@
 # --- !Ups
 
 create table area (
-  id                        bigint not null,
+  id                        bigint auto_increment not null,
   name                      varchar(255),
   constraint pk_area primary key (id))
 ;
 
 create table country (
-  id                        bigint not null,
+  id                        bigint auto_increment not null,
   name                      varchar(255),
   constraint pk_country primary key (id))
 ;
 
 create table language (
-  id                        bigint not null,
+  id                        bigint auto_increment not null,
   name                      varchar(255),
   constraint pk_language primary key (id))
 ;
 
 create table profession (
-  id                        bigint not null,
+  id                        bigint auto_increment not null,
   name                      varchar(255),
   constraint pk_profession primary key (id))
 ;
 
+create table skill (
+  id                        bigint auto_increment not null,
+  name                      varchar(255),
+  constraint pk_skill primary key (id))
+;
+
 create table user (
-  id                        bigint not null,
+  id                        bigint auto_increment not null,
   firstname                 varchar(255),
   lastname                  varchar(255),
   profession                varchar(255),
@@ -43,27 +49,15 @@ create table user (
 ;
 
 create table user_education (
-  id                        integer not null,
+  id                        integer auto_increment not null,
   user_id                   bigint,
   degree                    varchar(255),
   institution               varchar(255),
-  start_year                timestamp,
-  end_year                  timestamp,
+  start_year                datetime,
+  end_year                  datetime,
   area_id                   bigint,
   constraint pk_user_education primary key (id))
 ;
-
-create sequence area_seq;
-
-create sequence country_seq;
-
-create sequence language_seq;
-
-create sequence profession_seq;
-
-create sequence user_seq;
-
-create sequence user_education_seq;
 
 alter table user_education add constraint fk_user_education_user_1 foreign key (user_id) references user (id) on delete restrict on update restrict;
 create index ix_user_education_user_1 on user_education (user_id);
@@ -74,31 +68,21 @@ create index ix_user_education_area_2 on user_education (area_id);
 
 # --- !Downs
 
-SET REFERENTIAL_INTEGRITY FALSE;
+SET FOREIGN_KEY_CHECKS=0;
 
-drop table if exists area;
+drop table area;
 
-drop table if exists country;
+drop table country;
 
-drop table if exists language;
+drop table language;
 
-drop table if exists profession;
+drop table profession;
 
-drop table if exists user;
+drop table skill;
 
-drop table if exists user_education;
+drop table user;
 
-SET REFERENTIAL_INTEGRITY TRUE;
+drop table user_education;
 
-drop sequence if exists area_seq;
-
-drop sequence if exists country_seq;
-
-drop sequence if exists language_seq;
-
-drop sequence if exists profession_seq;
-
-drop sequence if exists user_seq;
-
-drop sequence if exists user_education_seq;
+SET FOREIGN_KEY_CHECKS=1;
 

@@ -17,8 +17,7 @@ public class User extends Model {
     @Id
     public Long id;
 
-    public String firstname;
-    public String lastname;
+    public String fullName;
     public String profession;
 
     private String authToken;
@@ -44,6 +43,10 @@ public class User extends Model {
 
     @OneToMany(mappedBy = "user")
     public List<UserEducation> educationList;
+
+    @OneToMany(mappedBy = "asker")
+    public List<Question> questionList;
+
 
     public static Finder<Long, User> find = new Finder<Long, User>(Long.class, User.class);
 

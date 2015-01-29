@@ -39,7 +39,9 @@ public class LoginController extends Controller {
             ObjectNode authTokenJson = Json.newObject();
             authTokenJson.put(AUTH_TOKEN, authToken);
             response().setCookie(AUTH_TOKEN, authToken);
-            return ok(authTokenJson);
+            ObjectNode result = Json.newObject();
+            result.put("data", Json.toJson(authTokenJson));
+            return ok(result);
         }
     }
 
@@ -47,6 +49,7 @@ public class LoginController extends Controller {
     public static Result logout() {
         response().discardCookie(AUTH_TOKEN);
         getUser().deleteToken();
+        //TODO: redirect to another enpoint?
         return redirect("/");
     }
 

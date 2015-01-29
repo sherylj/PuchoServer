@@ -1,8 +1,12 @@
 package controllers;
 
+/**
+ * Created by sherylj on 1/26/15.
+ */
+
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import models.Area;
+import models.Skill;
 import play.db.ebean.Model;
 import play.libs.Json;
 import play.mvc.Controller;
@@ -14,11 +18,11 @@ import java.util.List;
 /**
  * Created by sherylj on 1/18/15.
  */
-public class Areas extends Controller {
+public class Skills extends Controller {
     public static Result list() {
-        List<Area> areas = new Model.Finder<Long , Area>(Long.class, Area.class).all();
+        List<Skill> skills = new Model.Finder<Long , Skill>(Long.class, Skill.class).all();
         ObjectNode result = Json.newObject();
-        result.put("data", Json.toJson(areas));
+        result.put("data", Json.toJson(skills));
         return ok(result);
     }
 
@@ -30,24 +34,25 @@ public class Areas extends Controller {
         }
         String name = jsonNode.findPath("name").asText();
         //Check if area exists in the table else add it
-        Area area = Area.findByName(name);
-        if (area != null) {
-            return found("Area already exists!");
+        Skill skill = Skill.findByName(name);
+        if (skill != null) {
+            return found("Skill already exists!");
         }
-        area = new Area(name);
-        area.save();
+        skill = new Skill(name);
+        skill.save();
         ObjectNode result = Json.newObject();
-        result.put("data", Json.toJson(area));
+        result.put("data", Json.toJson(skill));
         return created(result);
     }
 
     public static Result delete(String name) {
-        Area area = Area.findByName(name);
-        if (area == null) {
+        Skill skill = Skill.findByName(name);
+        if (skill == null) {
             return notFound(String.format("Area %s does not exist.", name));
         }
 
-        area.delete();
-        return redirect(routes.Areas.list());
+        skill.delete();
+        return redirect(routes.Skills.list());
     }
 }
+

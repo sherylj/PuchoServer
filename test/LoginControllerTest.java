@@ -30,9 +30,8 @@ public class LoginControllerTest {
                 Result result = callAction(routes.ref.LoginController.login(), fakeRequest().withJsonBody(loginJson));
 
                 assertThat(status(result)).isEqualTo(OK);
-
                 JsonNode json = Json.parse(contentAsString(result));
-                assertThat(json.get("authToken")).isNotNull();
+                assertThat(json.get("data").get("authToken")).isNotNull();
             }
         });
     }

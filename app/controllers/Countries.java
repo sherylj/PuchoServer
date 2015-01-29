@@ -1,6 +1,7 @@
 package controllers;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import models.Country;
 import play.db.ebean.Model;
 import play.libs.Json;
@@ -17,7 +18,9 @@ public class Countries extends Controller {
 
     public static Result list() {
         List<Country> countries = new Model.Finder<Long , Country>(Long.class, Country.class).all();
-        return ok(Json.toJson(countries));
+        ObjectNode result = Json.newObject();
+        result.put("data", Json.toJson(countries));
+        return ok(result);
     }
 
     public static Result save() {
@@ -34,7 +37,9 @@ public class Countries extends Controller {
         }
         country = new Country(name);
         country.save();
-        return created();
+        ObjectNode result = Json.newObject();
+        result.put("data", Json.toJson(country));
+        return created(result);
     }
 
     public static Result delete(String name) {

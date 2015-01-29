@@ -1,6 +1,7 @@
 package controllers;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import models.User;
 import play.db.ebean.Model;
 import play.libs.Json;
@@ -17,7 +18,9 @@ public class Users extends Controller {
 
     public static Result list() {
         List<User> users = new Model.Finder<Long , User>(Long.class, User.class).all();
-        return ok(Json.toJson(users));
+        ObjectNode result = Json.newObject();
+        result.put("data", Json.toJson(users));
+        return ok(result);
     }
 
     @BodyParser.Of(BodyParser.Json.class)
@@ -32,8 +35,9 @@ public class Users extends Controller {
         String password = jsonNode.findPath("password").asText();
         User user = new User(username, email, password);
         user.save();
-
-        return created();
+        ObjectNode result = Json.newObject();
+        result.put("data", Json.toJson(user));
+        return created(Json.toJson(result));
     }
 
     public static Result findByEmail(String email) {
