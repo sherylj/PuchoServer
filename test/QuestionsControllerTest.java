@@ -26,10 +26,9 @@ public class QuestionsControllerTest  {
 
                 ObjectNode questionJson = Json.newObject();
                 questionJson.put("askerName", "abcd");
-                questionJson.put("title", "College Question");
                 questionJson.put("skill", "Computer Science");
                 questionJson.put("content", "How to pick a university?");
-                questionJson.put("askedId", TestData.user1.id);
+                questionJson.put("askerId", TestData.user1.id);
 
                 Result result = callAction(routes.ref.Questions.save(), fakeRequest().withJsonBody(questionJson).withHeader(LoginController.AUTH_TOKEN_HEADER, authToken));
 
@@ -50,7 +49,7 @@ public class QuestionsControllerTest  {
 
 
 
-                Result result = callAction(routes.ref.Questions.listQuestionsBySkill("advice"), fakeRequest("GET","/questions?skill=Advice")
+                Result result = callAction(routes.ref.Questions.listQuestionsBySkill("advice"), fakeRequest("GET","/questions?skillName=Advice")
                         .withHeader(LoginController.AUTH_TOKEN_HEADER, authToken));
 
                 assertThat(status(result)).isEqualTo(OK);

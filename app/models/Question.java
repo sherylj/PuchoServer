@@ -42,6 +42,12 @@ public class Question extends Model {
         this.skill = Skill.findByName(skill);
     }
 
+    public Question(String asker_name, String content, String skill) {
+        this.asker_name = asker_name;
+        this.content = content;
+        this.skill = Skill.findByName(skill);
+    }
+
     public static Finder<Long, Question> find = new Finder<Long, Question>(Long.class, Question.class);
 
     public static List<Question> findByTitle(String title) {

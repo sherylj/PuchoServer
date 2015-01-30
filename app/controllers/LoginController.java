@@ -38,6 +38,7 @@ public class LoginController extends Controller {
             String authToken = user.createToken();
             ObjectNode authTokenJson = Json.newObject();
             authTokenJson.put(AUTH_TOKEN, authToken);
+            authTokenJson.put("userId",user.id);
             response().setCookie(AUTH_TOKEN, authToken);
             ObjectNode result = Json.newObject();
             result.put("data", Json.toJson(authTokenJson));

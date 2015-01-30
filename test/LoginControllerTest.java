@@ -32,6 +32,7 @@ public class LoginControllerTest {
                 assertThat(status(result)).isEqualTo(OK);
                 JsonNode json = Json.parse(contentAsString(result));
                 assertThat(json.get("data").get("authToken")).isNotNull();
+                assertThat(json.get("data").get("userId")).isNotNull();
             }
         });
     }

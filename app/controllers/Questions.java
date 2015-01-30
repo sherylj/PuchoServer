@@ -29,7 +29,7 @@ public class Questions extends Controller {
     @Security.Authenticated(ActionAuthenticator.class)
     @JsonIgnore
     public static Result listQuestionsBySkill(String skillValue) {
-        String skillName = request().getQueryString("skill");
+        String skillName = request().getQueryString("skillName");
         if (skillName == "") {
             return badRequest("Empty skill does not exist");
         }
@@ -62,18 +62,17 @@ public class Questions extends Controller {
         }
 
         String askerName = jsonNode.findPath("askerName").asText();
-        String title = jsonNode.findPath("title").asText();
         String content = jsonNode.findPath("content").asText();
         String skill = jsonNode.findPath("skill").asText();
         String askerId = jsonNode.findPath("askerId").asText();
 
-        Question question = new Question(askerName, title, content,skill);
-        question.save();
+        Question question = new Question(askerName,content,skill);
+        //question.save();
 
         //Now find user and add to question
-        User asker = User.findByEmail(askerId);
+        User asker = User.findById(askerId);
         question.asker = asker;
-        question.update();
+        question.save();
         ObjectNode result = Json.newObject();
         result.put("data", Json.toJson(question));
         return ok(result);
