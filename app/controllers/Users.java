@@ -16,7 +16,11 @@ import java.util.List;
 public class Users extends Controller {
 
 
-    public static Result list() {
+    public static Result list(String username) {
+
+        if (username != "") {
+            return checkIfUsernameExists(username);
+        }
         List<User> users = new Model.Finder<Long , User>(Long.class, User.class).all();
         ObjectNode result = Json.newObject();
         result.put("data", Json.toJson(users));
@@ -40,6 +44,19 @@ public class Users extends Controller {
         return created(Json.toJson(result));
     }
 
+    public static Result checkIfUsernameExists(String username) {
+        User user = User.findByUsername(username);
+        ObjectNode bool = Json.newObject();
+        ObjectNode result = Json.newObject();
+        if (user == null)
+            bool.put("boolean", 0);
+        else
+            bool.put("boolean", 1);
+
+        return ok(Json.toJson(bool));
+
+    }
+
     public static Result findByEmail(String email) {
         return ok(Json.toJson(User.findByEmail(email)));
     }
@@ -59,6 +76,6 @@ public class Users extends Controller {
         }
 
         user.delete();
-        return redirect(routes.Users.list());
+        return redirect(routes.Users.list(""));
     }
 }

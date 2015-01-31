@@ -14,7 +14,7 @@ POST    /logout              controllers.LoginController.logout()
 #Map Pucho models
 
 #Users
-GET    /users                controllers.Users.list()
+GET    /users                controllers.Users.list(username : String ?= "")
 #Post json body
 POST   /users/               controllers.Users.save()
 GET    /users/:email         controllers.Users.findByEmail(email: String)
