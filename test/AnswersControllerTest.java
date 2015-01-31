@@ -14,23 +14,23 @@ import static play.test.Helpers.contentAsString;
 import static play.test.Helpers.status;
 
 /**
- * Created by sherylj on 1/28/15.
+ * Created by sherylj on 1/30/15.
  */
-public class QuestionsControllerTest  {
+public class AnswersControllerTest {
     @Test
-    public void saveQuestion() {
+    public void saveAnswer() {
         running(fakeApplication(inMemoryDatabase()), new Runnable() {
             public void run() {
                 TestData.loadTestData();
                 String authToken = TestData.user1.createToken();
 
-                ObjectNode questionJson = Json.newObject();
-                questionJson.put("askerName", "abcd");
-                questionJson.put("skill", "Computer Science");
-                questionJson.put("content", "How to pick a university?");
-                questionJson.put("askerId", TestData.user1.id);
+                ObjectNode answerJson = Json.newObject();
+                answerJson.put("questionId", 1);
+                answerJson.put("content", "Check out university site");
+                answerJson.put("answererId", TestData.user2.id);
 
-                Result result = callAction(routes.ref.Questions.save(), fakeRequest().withJsonBody(questionJson).withHeader(LoginController.AUTH_TOKEN_HEADER, authToken));
+
+                Result result = callAction(routes.ref.Answers.save(), fakeRequest().withJsonBody(answerJson).withHeader(LoginController.AUTH_TOKEN_HEADER, authToken));
 
                 assertThat(status(result)).isEqualTo(OK);
                 JsonNode json = Json.parse(contentAsString(result));
@@ -39,17 +39,21 @@ public class QuestionsControllerTest  {
             }
         });
     }
-    //listQuestionsBySkill
+
     @Test
-    public void listQuestionsBySkill() {
+    public void listAnswersByQuestion() {
         running(fakeApplication(inMemoryDatabase()), new Runnable() {
             public void run() {
                 TestData.loadTestData();
                 String authToken = TestData.user1.createToken();
 
+                ObjectNode answerJson = Json.newObject();
+                answerJson.put("questionId", 1);
+                answerJson.put("content", "Check out university site");
+                answerJson.put("answererId", TestData.user2.id);
 
-
-                Result result = callAction(routes.ref.Questions.listQuestionsBySkill("advice"), fakeRequest("GET","/questions?skillName=Advice")
+                callAction(routes.ref.Answers.save(), fakeRequest().withJsonBody(answerJson).withHeader(LoginController.AUTH_TOKEN_HEADER, authToken));
+                Result result = callAction(routes.ref.Answers.listAnswersByQuestion("1"), fakeRequest("GET","/answers?questionId=1")
                         .withHeader(LoginController.AUTH_TOKEN_HEADER, authToken));
 
                 assertThat(status(result)).isEqualTo(OK);
@@ -60,42 +64,27 @@ public class QuestionsControllerTest  {
         });
     }
 
+
     @Test
-    public void listQuestions() {
+    public void listAnswers() {
         running(fakeApplication(inMemoryDatabase()), new Runnable() {
             public void run() {
                 TestData.loadTestData();
                 String authToken = TestData.user1.createToken();
 
+                ObjectNode answerJson = Json.newObject();
+                answerJson.put("questionId", 1);
+                answerJson.put("content", "Check out university site");
+                answerJson.put("answererId", TestData.user2.id);
 
-
-                Result result = callAction(routes.ref.Questions.listQuestionsBySkill(""), fakeRequest("GET","/questions")
+                callAction(routes.ref.Answers.save(), fakeRequest().withJsonBody(answerJson).withHeader(LoginController.AUTH_TOKEN_HEADER, authToken));
+                Result result = callAction(routes.ref.Answers.listAnswersByQuestion(""), fakeRequest("GET","/answers")
                         .withHeader(LoginController.AUTH_TOKEN_HEADER, authToken));
 
                 assertThat(status(result)).isEqualTo(OK);
 
                 JsonNode json = Json.parse(contentAsString(result));
                 assertThat(json.get("data").get(0).get("id")).isNotNull();
-            }
-        });
-    }
-
-    @Test
-    public void getQuestionById() {
-        running(fakeApplication(inMemoryDatabase()), new Runnable() {
-            public void run() {
-                TestData.loadTestData();
-                String authToken = TestData.user1.createToken();
-
-
-
-                Result result = callAction(routes.ref.Questions.getQuestionById("1"), fakeRequest("GET","/questions/1")
-                        .withHeader(LoginController.AUTH_TOKEN_HEADER, authToken));
-
-                assertThat(status(result)).isEqualTo(OK);
-
-                JsonNode json = Json.parse(contentAsString(result));
-                assertThat(json.get("data").get("id")).isNotNull();
             }
         });
     }

@@ -28,10 +28,10 @@ public class Questions extends Controller {
 
     @Security.Authenticated(ActionAuthenticator.class)
     @JsonIgnore
-    public static Result listQuestionsBySkill(String skillValue) {
-        String skillName = request().getQueryString("skillName");
+    public static Result listQuestionsBySkill(String skillName) {
+        //String skillName = request().getQueryString("skillName");
         if (skillName == "") {
-            return badRequest("Empty skill does not exist");
+            return list();
         }
 
         List<Question> questions;
@@ -67,7 +67,6 @@ public class Questions extends Controller {
         String askerId = jsonNode.findPath("askerId").asText();
 
         Question question = new Question(askerName,content,skill);
-        //question.save();
 
         //Now find user and add to question
         User asker = User.findById(askerId);
@@ -76,6 +75,18 @@ public class Questions extends Controller {
         ObjectNode result = Json.newObject();
         result.put("data", Json.toJson(question));
         return ok(result);
+    }
+
+    @Security.Authenticated(ActionAuthenticator.class)
+    @JsonIgnore
+    public static Result getQuestionById(String id) {
+        Question question = Question.findById(id);
+
+        ObjectNode result = Json.newObject();
+        result.put("data", Json.toJson(question));
+        return ok(result);
+
+
     }
 
 }

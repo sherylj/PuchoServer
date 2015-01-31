@@ -3,6 +3,18 @@
 
 # --- !Ups
 
+create table answer (
+  id                        bigint auto_increment not null,
+  answerer_id               bigint,
+  question_id               bigint,
+  content                   varchar(255),
+  upvotes                   integer,
+  downvotes                 integer,
+  share_count               integer,
+  answered_on               datetime not null,
+  constraint pk_answer primary key (id))
+;
+
 create table area (
   id                        bigint auto_increment not null,
   name                      varchar(255),
@@ -78,24 +90,30 @@ create table user_education (
   constraint pk_user_education primary key (id))
 ;
 
-alter table question add constraint fk_question_asker_1 foreign key (asker_id) references user (id) on delete restrict on update restrict;
-create index ix_question_asker_1 on question (asker_id);
-alter table question add constraint fk_question_skill_2 foreign key (skill_id) references skill (id) on delete restrict on update restrict;
-create index ix_question_skill_2 on question (skill_id);
-alter table question_skills add constraint fk_question_skills_question_3 foreign key (question_id) references question (id) on delete restrict on update restrict;
-create index ix_question_skills_question_3 on question_skills (question_id);
-alter table question_skills add constraint fk_question_skills_skill_4 foreign key (skill_id) references skill (id) on delete restrict on update restrict;
-create index ix_question_skills_skill_4 on question_skills (skill_id);
-alter table user_education add constraint fk_user_education_user_5 foreign key (user_id) references user (id) on delete restrict on update restrict;
-create index ix_user_education_user_5 on user_education (user_id);
-alter table user_education add constraint fk_user_education_area_6 foreign key (area_id) references area (id) on delete restrict on update restrict;
-create index ix_user_education_area_6 on user_education (area_id);
+alter table answer add constraint fk_answer_answerer_1 foreign key (answerer_id) references user (id) on delete restrict on update restrict;
+create index ix_answer_answerer_1 on answer (answerer_id);
+alter table answer add constraint fk_answer_question_2 foreign key (question_id) references question (id) on delete restrict on update restrict;
+create index ix_answer_question_2 on answer (question_id);
+alter table question add constraint fk_question_asker_3 foreign key (asker_id) references user (id) on delete restrict on update restrict;
+create index ix_question_asker_3 on question (asker_id);
+alter table question add constraint fk_question_skill_4 foreign key (skill_id) references skill (id) on delete restrict on update restrict;
+create index ix_question_skill_4 on question (skill_id);
+alter table question_skills add constraint fk_question_skills_question_5 foreign key (question_id) references question (id) on delete restrict on update restrict;
+create index ix_question_skills_question_5 on question_skills (question_id);
+alter table question_skills add constraint fk_question_skills_skill_6 foreign key (skill_id) references skill (id) on delete restrict on update restrict;
+create index ix_question_skills_skill_6 on question_skills (skill_id);
+alter table user_education add constraint fk_user_education_user_7 foreign key (user_id) references user (id) on delete restrict on update restrict;
+create index ix_user_education_user_7 on user_education (user_id);
+alter table user_education add constraint fk_user_education_area_8 foreign key (area_id) references area (id) on delete restrict on update restrict;
+create index ix_user_education_area_8 on user_education (area_id);
 
 
 
 # --- !Downs
 
 SET FOREIGN_KEY_CHECKS=0;
+
+drop table answer;
 
 drop table area;
 
