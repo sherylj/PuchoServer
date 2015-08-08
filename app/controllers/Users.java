@@ -45,7 +45,7 @@ public class Users extends Controller {
     }
 
     public static Result checkIfUsernameExists(String username) {
-        User user = User.findByUsername(username);
+        User user = User.findByEmail(username);
         ObjectNode bool = Json.newObject();
         ObjectNode result = Json.newObject();
         if (user == null)
