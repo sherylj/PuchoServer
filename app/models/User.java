@@ -138,11 +138,5 @@ public class User extends Model {
 
            return find.where().eq("email", email.toLowerCase())
                    .eq("shaPassword", getSha512(password)).findUnique();
-           /*return find.where().conjunction()
-                   .add(Expr.eq("email", email.toLowerCase()))
-                   .add(Expr.eq("shaPassword", getSha512(password)))
-                   .findUnique();   */
-
-
     }
 }
