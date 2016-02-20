@@ -33,7 +33,6 @@ public class QuestionTest {
     }
 
     @Test
-    //public static Question findById(String id)
     public void testFindByTitle() {
         running(fakeApplication(inMemoryDatabase()), new Runnable() {
             public void run() {
@@ -46,10 +45,6 @@ public class QuestionTest {
 
                 List<Question> result = Question.findByTitle("College admission");
                 assertThat(result.size()).isEqualTo(2);
-
-                //User user1 = new User("abc","abc@me.com","abcdefgh");
-                //user1.save();
-
             }
         });
     }
@@ -77,9 +72,6 @@ public class QuestionTest {
                 List<Question> result = Question.findByAsker(user);
                 assertThat(result.size()).isEqualTo(1);
                 assertThat(result.get(0).asker_name).isEqualTo("John Doe");
-
-
-
             }
         });
     }
@@ -95,8 +87,6 @@ public class QuestionTest {
                 User user = new User("John Doe", "johndoe@me.com","asdsfdf");
                 user.save();
                 question.asker = user;
-
-
                 assertThat(question.id).isNotNull();
                 assertThat(question.asker_name).isEqualTo("John Doe");
                 assertThat(question.title).isEqualTo("College admission");
@@ -107,8 +97,6 @@ public class QuestionTest {
                 List<Question> result = Question.findBySkill(skill);
                 assertThat(result.size()).isEqualTo(1);
                 assertThat(result.get(0).asker_name).isEqualTo("John Doe");
-
-
 
             }
         });
